@@ -7,7 +7,9 @@ authors = [
     { name = "X4tar", email = "x4tar@foxmail.com" }
 ]
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "uvicorn>=0.52.1",
+]
 
 [project.scripts]
 enterprise-rag = "enterprise_rag:main"

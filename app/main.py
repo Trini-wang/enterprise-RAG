@@ -8,8 +8,8 @@ app = FastAPI(
     version="0.1.0",
 )
 
-app.include_router(docs.router, prefix="/docs", tags=["documents"])
-app.include_router(query.router, prefix="/query", tags=["query"])
+app.include_router(docs, prefix="/docs", tags=["documents"])
+app.include_router(query, prefix="/query", tags=["query"])
 
 
 @app.get("/")

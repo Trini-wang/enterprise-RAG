@@ -26,7 +26,7 @@ def list_documents() -> list[DocumentSummary]:
 
 
 @router.get("/{doc_id}")
-def get_document(doc_id: str) -> Dict[str, object]:
+def get_document(doc_id: str) -> dict[str, object]:
     doc = store.get_document(doc_id)
     if doc is None:
         raise HTTPException(status_code=404, detail="未找到文档")
