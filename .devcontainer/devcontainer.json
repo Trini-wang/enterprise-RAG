@@ -1,0 +1,16 @@
+{
+  "name": "Enterprise RAG Dev Container",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/app",
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance"
+  ],
+  "postCreateCommand": "python -m pip install --no-cache-dir -r requirements.txt"
+}

@@ -8,3 +8,9 @@ wheels/
 
 # Virtual environments
 .venv
+.pytest_cache/
+.uv-cache/
+
+# Runtime data
+app/data/
+app/uploads/

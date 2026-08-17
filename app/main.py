@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers import docs, query
+from app.routers import auth, docs, files, query, users
 
 app = FastAPI(
     title="企业文档RAG系统",
@@ -10,6 +10,9 @@ app = FastAPI(
 
 app.include_router(docs, prefix="/docs", tags=["documents"])
 app.include_router(query, prefix="/query", tags=["query"])
+app.include_router(auth, prefix="/auth", tags=["auth"])
+app.include_router(users, prefix="/users", tags=["users"])
+app.include_router(files, prefix="/files", tags=["files"])
 
 
 @app.get("/")
