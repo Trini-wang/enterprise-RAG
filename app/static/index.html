@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="知澜企业知识库管理平台">
+  <title>知澜 · 企业知识库</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/chat.css">
+</head>
+<body>
+  <div id="toastRegion" class="toast-region" aria-live="polite"></div>
+
+  <section id="authView" class="auth-view">
+    <div class="auth-brand">
+      <a class="brand brand-large" href="#" aria-label="知澜首页">
+        <span class="brand-mark">澜</span>
+        <span><b>知澜</b><small>企业知识库</small></span>
+      </a>
+      <div class="auth-copy">
+        <span class="eyebrow">ENTERPRISE KNOWLEDGE HUB</span>
+        <h1>让每一份知识，<br><em>清晰抵达。</em></h1>
+        <p>统一沉淀企业资料，快速检索准确答案。让团队少一点寻找，多一点创造。</p>
+      </div>
+      <div class="auth-orbit" aria-hidden="true">
+        <span class="orbit-core">知</span><i></i><i></i><i></i>
+      </div>
+      <p class="auth-foot">安全 · 专注 · 高效</p>
+    </div>
+
+    <div class="auth-panel">
+      <div class="auth-card">
+        <div class="mobile-brand brand"><span class="brand-mark">澜</span><b>知澜</b></div>
+        <div class="auth-heading">
+          <h2 id="authTitle">欢迎回来</h2>
+          <p id="authSubtitle">登录后继续探索你的企业知识库</p>
+        </div>
+        <div class="segmented" role="tablist">
+          <button id="loginTab" class="active" type="button" role="tab">登录</button>
+          <button id="registerTab" type="button" role="tab">注册</button>
+        </div>
+        <form id="authForm" novalidate>
+          <label class="field register-only hidden">
+            <span>姓名</span>
+            <input id="fullName" type="text" maxlength="100" autocomplete="name" placeholder="你的姓名">
+          </label>
+          <label class="field">
+            <span>邮箱</span>
+            <input id="email" type="email" autocomplete="email" placeholder="name@company.com" required>
+          </label>
+          <label class="field">
+            <span>密码</span>
+            <span class="password-wrap">
+              <input id="password" type="password" minlength="8" autocomplete="current-password" placeholder="至少 8 位字符" required>
+              <button id="togglePassword" class="icon-button" type="button" aria-label="显示密码">◉</button>
+            </span>
+          </label>
+          <button id="authSubmit" class="button primary wide" type="submit"><span>登录</span><b>→</b></button>
+          <p id="authHint" class="form-hint">还没有账号？<button type="button" data-switch-auth="register">立即注册</button></p>
+        </form>
+      </div>
+      <p class="copyright">© 2026 知澜 Enterprise RAG</p>
+    </div>
+  </section>
+
+  <div id="appView" class="app-view hidden">
+    <aside id="sidebar" class="sidebar">
+      <div class="brand sidebar-brand"><span class="brand-mark">澜</span><span><b>知澜</b><small>企业知识库</small></span></div>
+      <nav class="nav-list" aria-label="主导航">
+        <button class="nav-item active" data-page="overview"><span class="nav-icon">⌂</span>概览</button>
+        <button class="nav-item" data-page="chat"><span class="nav-icon">✦</span>AI 对话</button>
+        <button class="nav-item" data-page="search"><span class="nav-icon">⌕</span>知识检索</button>
+        <button class="nav-item" data-page="documents"><span class="nav-icon">▤</span>文档管理</button>
+        <button class="nav-item" data-page="files"><span class="nav-icon">⇧</span>文件中心</button>
+        <p class="nav-label">管理</p>
+        <button id="promptsNav" class="nav-item hidden" data-page="prompts"><span class="nav-icon">⌘</span>Prompt 管理</button>
+        <button id="modelsNav" class="nav-item hidden" data-page="models"><span class="nav-icon">◇</span>模型管理</button>
+        <button id="usersNav" class="nav-item hidden" data-page="users"><span class="nav-icon">♙</span>用户管理</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item" data-page="profile"><span class="nav-icon">⚙</span>个人设置</button>
+        <div class="sidebar-user">
+          <span id="sideAvatar" class="avatar">U</span>
+          <span class="user-identity"><b id="sideName">用户</b><small id="sideRole">成员</small></span>
+          <button id="logoutButton" class="icon-button" title="退出登录" aria-label="退出登录">↪</button>
+        </div>
+      </div>
+    </aside>
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <main class="main-shell">
+      <header class="topbar">
+        <button id="menuButton" class="icon-button menu-button" aria-label="打开菜单">☰</button>
+        <div>
+          <p class="breadcrumb">工作台 <span>/</span> <b id="breadcrumbCurrent">概览</b></p>
+        </div>
+        <div class="top-actions">
+          <span class="status-dot"><i></i> 服务正常</span>
+          <button id="topProfile" class="top-profile"><span id="topAvatar" class="avatar small">U</span><span id="topName">用户</span><b>⌄</b></button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <section id="page-overview" class="page active">
+          <div class="welcome-row">
+            <div><p class="eyebrow blue">GOOD DAY</p><h1><span id="greeting">下午好</span>，<span id="welcomeName">朋友</span></h1><p>问 AI 任何问题，也可以查询企业知识。</p></div>
+            <span id="todayText" class="date-pill"></span>
+          </div>
+          <form id="heroSearchForm" class="hero-search">
+            <span>✦</span><input id="heroSearchInput" placeholder="给 AI 发送消息，也可以询问企业知识…" autocomplete="off"><button>开始对话</button>
+          </form>
+          <div class="stat-grid">
+            <article class="stat-card"><span class="stat-icon doc">▤</span><div><small>知识文档</small><strong id="documentCount">—</strong><p>已建立索引</p></div></article>
+            <article class="stat-card"><span class="stat-icon file">⇧</span><div><small>我的文件</small><strong id="fileCount">—</strong><p>安全存储</p></div></article>
+            <article class="stat-card"><span class="stat-icon user">♙</span><div><small>团队成员</small><strong id="userCount">—</strong><p id="userCountHint">当前账户</p></div></article>
+          </div>
+          <div class="overview-grid">
+            <article class="panel quick-panel">
+              <div class="panel-head"><div><h2>快捷开始</h2><p>选择一项操作，开始使用知识库</p></div></div>
+              <div class="quick-grid">
+                <button data-go="chat"><span>✦</span><b>AI 对话</b><small>聊天、写作或询问企业知识</small><i>→</i></button>
+                <button data-go="search"><span>⌕</span><b>检索知识</b><small>直接查找文档原文</small><i>→</i></button>
+                <button data-go="documents"><span>＋</span><b>录入文档</b><small>粘贴文本并创建索引</small><i>→</i></button>
+              </div>
+            </article>
+            <article class="panel latest-panel">
+              <div class="panel-head"><div><h2>最近文档</h2><p>知识库最新收录</p></div><button class="text-button" data-go="documents">查看全部 →</button></div>
+              <div id="recentDocuments" class="mini-list"><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="page-chat" class="page chat-page">
+          <div class="chat-shell panel">
+            <aside class="conversation-pane">
+              <button id="newConversation" class="button primary wide">＋ 新建对话</button>
+              <div class="inline-search chat-history-search"><span>⌕</span><input id="conversationFilter" placeholder="搜索历史对话"></div>
+              <div id="conversationList" class="conversation-list"><p class="muted">正在加载…</p></div>
+            </aside>
+            <div class="chat-main">
+              <header class="chat-header">
+                <div><h2 id="chatTitle">新对话</h2><small id="chatStatus">AI 会先检索企业知识，再回答你的问题</small></div>
+                <div class="model-pickers">
+                  <label><span>平台</span><select id="providerSelect"></select></label>
+                  <label><span>模型</span><select id="modelSelect"></select></label>
+                  <label><span>Prompt</span><select id="promptSelect"></select></label>
+                </div>
+              </header>
+              <div id="chatMessages" class="chat-messages">
+                <div id="chatEmpty" class="chat-empty"><span>✦</span><h2>今天想聊些什么？</h2><p>我会先查找企业知识；没有相关资料时，也会使用所选模型正常回答。</p><div><button data-chat-example="公司的年假制度是什么？">询问企业制度</button><button data-chat-example="帮我写一封项目周报邮件">帮助写作</button></div></div>
+              </div>
+              <form id="chatForm" class="chat-composer">
+                <textarea id="chatInput" rows="2" maxlength="20000" placeholder="给 AI 发送消息…" required></textarea>
+                <div><small id="chatHint">Enter 发送 · Shift + Enter 换行</small><button id="stopChat" class="button secondary hidden" type="button">停止</button><button id="sendChat" class="button primary" type="submit">发送 ↑</button></div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-search" class="page">
+          <div class="page-title"><div><p class="eyebrow blue">KNOWLEDGE SEARCH</p><h1>知识检索</h1><p>输入问题，从知识库中快速定位相关内容。</p></div></div>
+          <div class="search-layout">
+            <article class="panel search-workbench">
+              <form id="searchForm" class="search-box">
+                <span>⌕</span><textarea id="searchQuery" rows="2" placeholder="例如：公司的年假制度是什么？" required></textarea>
+                <label>返回 <select id="topK"><option value="3">3 条</option><option value="5">5 条</option><option value="10">10 条</option></select></label>
+                <button class="button primary" type="submit">检索答案</button>
+              </form>
+              <div id="searchEmpty" class="empty-state large"><span>⌕</span><h3>开始一次知识探索</h3><p>你的问题越具体，检索结果就越准确</p><div class="suggestions"><button>有哪些文档？</button><button>总结知识库内容</button></div></div>
+              <div id="searchLoading" class="search-loading hidden"><i></i><p>正在知识库中检索…</p></div>
+              <div id="searchResults" class="hidden">
+                <div class="answer-card"><div class="answer-label"><span>✦</span> 知澜回答</div><p id="answerText"></p></div>
+                <div class="result-heading"><h3>相关内容</h3><span id="resultCount"></span></div>
+                <div id="resultList" class="result-list"></div>
+              </div>
+            </article>
+            <aside class="tip-card"><span>✦</span><h3>检索小贴士</h3><p>使用完整、具体的问题，比输入单个关键词更容易获得准确答案。</p><hr><small>当前检索范围</small><b>全部知识文档</b></aside>
+          </div>
+        </section>
+
+        <section id="page-documents" class="page">
+          <div class="page-title"><div><p class="eyebrow blue">KNOWLEDGE BASE</p><h1>文档管理</h1><p>录入文本内容，构建可检索的企业知识库。</p></div><button id="newDocumentButton" class="button primary">＋ 录入文档</button></div>
+          <div class="panel table-panel">
+            <div class="table-toolbar"><div class="inline-search"><span>⌕</span><input id="documentFilter" placeholder="搜索文档名称"></div><span id="documentTotal" class="muted"></span></div>
+            <div class="table-scroll"><table><thead><tr><th>文档名称</th><th>文档 ID</th><th>索引片段</th><th>状态</th><th>操作</th></tr></thead><tbody id="documentsTable"></tbody></table></div>
+            <div id="documentsEmpty" class="empty-state hidden"><span>▤</span><h3>还没有知识文档</h3><p>录入第一份内容，开始构建知识库</p></div>
+          </div>
+        </section>
+
+        <section id="page-files" class="page">
+          <div class="page-title"><div><p class="eyebrow blue">FILE CENTER</p><h1>文件中心</h1><p>上传和管理你的个人文件，文件仅你自己可见。</p></div></div>
+          <div id="dropZone" class="drop-zone" tabindex="0"><input id="fileInput" type="file" hidden><span>⇧</span><h3>拖拽文件到这里，或 <button id="chooseFileButton" type="button">选择文件</button></h3><p>单个文件最大 10 MB</p></div>
+          <div id="uploadProgress" class="upload-progress hidden"><span class="file-type">···</span><div><b id="uploadName">正在上传</b><div><i id="uploadBar"></i></div></div><span id="uploadPercent">0%</span></div>
+          <div class="panel table-panel file-list-panel">
+            <div class="panel-head"><div><h2>我的文件</h2><p id="fileTotal">加载中…</p></div><button id="refreshFiles" class="icon-button" title="刷新">↻</button></div>
+            <div id="filesGrid" class="files-grid"></div>
+            <div id="filesEmpty" class="empty-state hidden"><span>⇧</span><h3>还没有上传文件</h3><p>将资料安全地保存在这里</p></div>
+          </div>
+        </section>
+
+        <section id="page-users" class="page">
+          <div class="page-title"><div><p class="eyebrow blue">TEAM MANAGEMENT</p><h1>用户管理</h1><p>管理团队成员的角色与账户状态。</p></div></div>
+          <div class="panel table-panel">
+            <div class="table-toolbar"><div class="inline-search"><span>⌕</span><input id="userFilter" placeholder="搜索姓名或邮箱"></div><span id="usersTotal" class="muted"></span></div>
+            <div class="table-scroll"><table><thead><tr><th>用户</th><th>角色</th><th>状态</th><th>加入时间</th><th>操作</th></tr></thead><tbody id="usersTable"></tbody></table></div>
+          </div>
+        </section>
+
+        <section id="page-models" class="page">
+          <div class="page-title"><div><p class="eyebrow blue">AI PLATFORM</p><h1>模型管理</h1><p>配置 OpenAI-compatible 平台和允许用户选择的模型。</p></div></div>
+          <div class="admin-two-column">
+            <form id="providerForm" class="panel settings-form">
+              <input id="providerId" type="hidden">
+              <div class="panel-head"><div><h2 id="providerFormTitle">新增平台与模型</h2><p>API Key 加密保存，页面不会再次显示明文</p></div><button id="cancelProviderEdit" class="text-button hidden" type="button">取消编辑</button></div>
+              <label class="field"><span>平台名称</span><input id="providerName" placeholder="例如 OpenCode Zen" required></label>
+              <label class="field"><span>Base URL</span><input id="providerBaseUrl" type="url" placeholder="https://example.com/v1" required></label>
+              <label class="field"><span>API Key</span><input id="providerApiKey" type="password" autocomplete="new-password" placeholder="编辑时留空表示不更换"><small>密钥只提交到服务端并加密保存</small></label>
+              <label class="field advanced-config"><span>环境变量兜底</span><input id="providerKeyEnv" value="AI_API_KEY"><small>未填写 API Key 时从该环境变量读取</small></label>
+              <div id="initialModelFields">
+                <label class="field"><span>首个模型标识</span><input id="providerModelKey" placeholder="供应商 API 使用的 model 值"></label>
+                <label class="field"><span>模型显示名称</span><input id="providerModelName" placeholder="用户看到的名称"></label>
+              </div>
+              <button class="button primary" type="submit">保存平台和模型</button>
+            </form>
+            <div class="panel settings-form"><div class="panel-head"><div><h2>已配置平台</h2><p>只有启用且密钥可用的平台会出现在对话页</p></div></div><div id="providerAdminList" class="admin-card-list"></div></div>
+          </div>
+        </section>
+
+        <section id="page-prompts" class="page">
+          <div class="page-title"><div><p class="eyebrow blue">PROMPT STUDIO</p><h1>Prompt 管理</h1><p>分别定义知识命中和未命中时的 AI 行为。</p></div></div>
+          <div class="admin-two-column prompt-admin-grid">
+            <form id="promptForm" class="panel settings-form">
+              <div class="panel-head"><div><h2>新建 Prompt</h2><p>保存后可直接发布给用户</p></div></div>
+              <label class="field"><span>名称</span><input id="promptName" required></label>
+              <label class="field"><span>System Prompt</span><textarea id="promptSystem" rows="5" required>你是知澜 AI 助手。优先使用企业知识；没有知识时使用通用能力正常回答，不要编造企业内部事实。</textarea></label>
+              <label class="field"><span>知识命中模板</span><textarea id="promptHit" rows="5" required>企业知识：&#10;{{context}}&#10;&#10;用户问题：{{question}}</textarea></label>
+              <label class="field"><span>知识未命中模板</span><textarea id="promptMiss" rows="4" required>未检索到相关企业知识，请使用通用能力回答。&#10;用户问题：{{question}}</textarea></label>
+              <div class="form-row"><label class="field"><span>Top K</span><input id="promptTopK" type="number" min="1" max="20" value="3"></label><label class="field"><span>最低相关度</span><input id="promptMinScore" type="number" min="0" max="1" step="0.01" value="0.15"></label></div>
+              <label class="switch-row"><span><b>立即发布</b><small>发布后普通用户可选择</small></span><input id="promptPublish" type="checkbox" checked><i></i></label>
+              <button class="button primary" type="submit">保存 Prompt</button>
+            </form>
+            <div class="panel settings-form"><div class="panel-head"><div><h2>Prompt 列表</h2><p>发布新版本不会覆盖历史回答</p></div></div><div id="promptAdminList" class="admin-card-list"></div></div>
+          </div>
+        </section>
+
+        <section id="page-profile" class="page">
+          <div class="page-title"><div><p class="eyebrow blue">ACCOUNT</p><h1>个人设置</h1><p>查看账户信息并更新你的个人资料。</p></div></div>
+          <div class="settings-grid">
+            <aside class="panel profile-summary"><span id="profileAvatar" class="avatar xlarge">U</span><h2 id="profileName">用户</h2><p id="profileEmail">—</p><span id="profileRole" class="role-badge">成员</span></aside>
+            <form id="profileForm" class="panel settings-form">
+              <div class="panel-head"><div><h2>基本信息</h2><p>修改姓名或设置新密码</p></div></div>
+              <label class="field"><span>邮箱</span><input id="profileEmailInput" disabled></label>
+              <label class="field"><span>姓名</span><input id="profileNameInput" maxlength="100" required></label>
+              <label class="field"><span>新密码 <i>（不修改请留空）</i></span><input id="profilePassword" type="password" minlength="8" placeholder="至少 8 位字符"></label>
+              <div><button class="button primary" type="submit">保存更改</button></div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="documentDialog" class="modal">
+    <form id="documentForm" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow blue">NEW DOCUMENT</p><h2>录入知识文档</h2></div><button class="icon-button" type="button" data-close-dialog="documentDialog" aria-label="关闭">×</button></div>
+      <label class="field"><span>文档名称</span><input id="documentName" maxlength="120" placeholder="例如：员工休假管理制度" required></label>
+      <label class="field"><span>文档内容</span><textarea id="documentContent" rows="12" placeholder="粘贴需要建立索引的文本内容…" required></textarea><small><b id="contentLength">0</b> 个字符</small></label>
+      <div class="modal-actions"><button class="button secondary" type="button" data-close-dialog="documentDialog">取消</button><button id="saveDocument" class="button primary" type="submit">保存并建立索引</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="documentDetailDialog" class="modal detail-modal"><div class="modal-head"><div><p class="eyebrow blue">DOCUMENT DETAIL</p><h2 id="detailName">文档详情</h2></div><button id="closeDetail" class="icon-button">×</button></div><div class="detail-meta"><span id="detailId"></span><span id="detailChunks"></span></div><pre id="detailContent"></pre></dialog>
+
+  <dialog id="userDialog" class="modal small-modal">
+    <form id="userForm" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow blue">EDIT MEMBER</p><h2 id="editUserName">编辑用户</h2></div><button class="icon-button" type="button" data-close-dialog="userDialog">×</button></div>
+      <input id="editUserId" type="hidden">
+      <label class="field"><span>姓名</span><input id="editFullName" required></label>
+      <label class="field"><span>角色</span><select id="editRole"><option value="user">普通成员</option><option value="admin">管理员</option></select></label>
+      <label class="switch-row"><span><b>账户启用</b><small>停用后该用户将无法登录</small></span><input id="editActive" type="checkbox"><i></i></label>
+      <div class="modal-actions"><button class="button secondary" type="button" data-close-dialog="userDialog">取消</button><button class="button primary" type="submit">保存更改</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="confirmDialog" class="modal confirm-modal"><div class="confirm-icon">!</div><h2 id="confirmTitle">确认操作</h2><p id="confirmMessage"></p><div class="modal-actions"><button id="confirmCancel" class="button secondary">取消</button><button id="confirmOk" class="button danger">确认</button></div></dialog>
+  <dialog id="citationDialog" class="modal detail-modal"><div class="modal-head"><div><p class="eyebrow blue">KNOWLEDGE SOURCE</p><h2 id="citationTitle">引用详情</h2></div><button class="icon-button" type="button" data-close-dialog="citationDialog">×</button></div><div class="detail-meta"><span id="citationScore"></span></div><pre id="citationContent"></pre></dialog>
+  <dialog id="modelDialog" class="modal small-modal">
+    <form id="modelForm" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow blue">NEW MODEL</p><h2 id="modelDialogTitle">新增模型</h2></div><button class="icon-button" type="button" data-close-dialog="modelDialog">×</button></div>
+      <input id="modelProviderId" type="hidden">
+      <label class="field"><span>模型标识</span><input id="newModelKey" placeholder="例如 deepseek-v4-flash" required></label>
+      <label class="field"><span>模型显示名称</span><input id="newModelName" required></label>
+      <label class="field"><span>上下文长度</span><input id="newModelContext" type="number" min="1024" value="32000" required></label>
+      <label class="switch-row"><span><b>设为默认模型</b></span><input id="newModelDefault" type="checkbox"><i></i></label>
+      <div class="modal-actions"><button class="button secondary" type="button" data-close-dialog="modelDialog">取消</button><button class="button primary" type="submit">保存模型</button></div>
+    </form>
+  </dialog>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

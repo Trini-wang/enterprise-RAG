@@ -5,7 +5,7 @@ from collections import Counter
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
-WORD_RE = re.compile(r"\w+", flags=re.U)
+WORD_RE = re.compile(r"[a-zA-Z0-9_]+|[\u4e00-\u9fff]", flags=re.U)
 
 
 @dataclass
@@ -28,7 +28,10 @@ class DocumentStore:
 
     @staticmethod
     def _normalize(text: str) -> List[str]:
-        return [token.lower() for token in WORD_RE.findall(text)]
+        raw = [token.lower() for token in WORD_RE.findall(text)]
+        chinese = [token for token in raw if "\u4e00" <= token <= "\u9fff"]
+        bigrams = [chinese[index] + chinese[index + 1] for index in range(len(chinese) - 1)]
+        return raw + bigrams
 
     @staticmethod
     def _split_chunk(text: str, max_chars: int = 800) -> List[str]:
@@ -127,7 +130,7 @@ class DocumentStore:
             "chunk_count": len(chunk_ids),
         }
 
-    def _rank_chunks(self, query: str, top_k: int) -> List[DocumentChunk]:
+    def _rank_scored_chunks(self, query: str, top_k: int) -> List[tuple[float, DocumentChunk]]:
         tokens = self._normalize(query)
         if not tokens:
             return []
@@ -143,17 +146,22 @@ class DocumentStore:
                 scores.append((score, chunk))
 
         scores.sort(key=lambda item: item[0], reverse=True)
-        return [chunk for _, chunk in scores[:top_k]]
+        return scores[:top_k]
+
+    def _rank_chunks(self, query: str, top_k: int) -> List[DocumentChunk]:
+        return [chunk for _, chunk in self._rank_scored_chunks(query, top_k)]
 
     def search(self, query: str, top_k: int = 3) -> List[Dict[str, object]]:
-        matches = self._rank_chunks(query, top_k)
+        matches = self._rank_scored_chunks(query, top_k)
         return [
             {
+                "document_id": chunk.doc_id,
+                "chunk_id": chunk.chunk_id,
                 "text": chunk.text,
                 "source": chunk.name,
-                "score": float(round(sum(query_word in chunk.text for query_word in query.split()) / max(1, len(query.split())), 4)),
+                "score": float(round(score, 4)),
             }
-            for chunk in matches
+            for score, chunk in matches
         ]
 
     def answer_question(self, query: str, top_k: int = 3) -> str:

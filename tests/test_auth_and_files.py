@@ -78,3 +78,14 @@ def test_protected_routes_reject_missing_token() -> None:
     assert client.get("/auth/me").status_code == 401
     assert client.get("/users").status_code == 401
     assert client.post("/files/upload", files={"file": ("a.txt", b"a")}).status_code == 401
+
+
+def test_frontend_and_static_assets_are_served() -> None:
+    client = TestClient(app)
+    page = client.get("/")
+    assert page.status_code == 200
+    assert "知澜" in page.text
+    assert client.get("/static/styles.css").status_code == 200
+    assert client.get("/static/app.js").status_code == 200
+    assert client.get("/static/chat.css").status_code == 200
+    assert "AI 对话" in page.text

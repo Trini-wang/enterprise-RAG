@@ -1,5 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from typing import Any
 
+from fastapi import APIRouter, Depends, HTTPException
+
+from app.dependencies.auth import get_current_user
 from app.schemas import DocumentCreate, DocumentResponse, DocumentSummary
 from app.services.document_store import store
 
@@ -7,7 +10,7 @@ router = APIRouter()
 
 
 @router.post("/upload", response_model=DocumentResponse)
-def upload_document(payload: DocumentCreate) -> DocumentResponse:
+def upload_document(payload: DocumentCreate, _: dict[str, Any] = Depends(get_current_user)) -> DocumentResponse:
     try:
         saved = store.add_document(payload.name, payload.content)
     except ValueError as exc:
@@ -21,12 +24,12 @@ def upload_document(payload: DocumentCreate) -> DocumentResponse:
 
 
 @router.get("/list", response_model=list[DocumentSummary])
-def list_documents() -> list[DocumentSummary]:
+def list_documents(_: dict[str, Any] = Depends(get_current_user)) -> list[DocumentSummary]:
     return [DocumentSummary(**doc) for doc in store.list_documents()]
 
 
 @router.get("/{doc_id}")
-def get_document(doc_id: str) -> dict[str, object]:
+def get_document(doc_id: str, _: dict[str, Any] = Depends(get_current_user)) -> dict[str, object]:
     doc = store.get_document(doc_id)
     if doc is None:
         raise HTTPException(status_code=404, detail="未找到文档")
